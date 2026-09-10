@@ -1,0 +1,7 @@
+#ifndef CONSTS_H
+#define CONSTS_H
+
+#define NODE_LINKS_FORWARD_SIZE 4
+#define NODE_LINKS_BACKWARD_SIZE 4
+
+#endif // CONSTS_H
