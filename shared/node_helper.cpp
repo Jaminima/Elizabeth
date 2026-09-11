@@ -5,6 +5,7 @@ Node* NodeHelper::createNode() {
     node->activation = 0.0f;
     node->previous_activation = 0.0f;
     node->previous_activation_epoch_index = -1;
+    node->node_layer = 0;
     return node;
 }
 
@@ -54,6 +55,7 @@ NodeLink* NodeHelper::addBackwardNode(Node* node) {
     link->backward = newNode;
     newNode->forward_nodes[0] = link;
     newNode->current_forward = 1;
+    newNode->node_layer = node->node_layer - 1;
 
     node->backward_nodes[node->current_backward] = link;
     node->current_backward++;
@@ -73,6 +75,7 @@ NodeLink* NodeHelper::addForwardNode(Node* node) {
     link->forward = newNode;
     newNode->backward_nodes[0] = link;
     newNode->current_backward = 1;
+    newNode->node_layer = node->node_layer + 1;
 
     node->forward_nodes[node->current_forward] = link;
     node->current_forward++;
