@@ -7,6 +7,7 @@
 class TreeCloner {
 public:
     static Tree* cloneTree(Tree* originalTree);
+    static Tree** cloneTrees(Tree* originalTree, int treeCount);
     static Node* cloneNode(Node* originalNode, PointerLookupDictionary* nodeLookup);
     static NodeLink* cloneNodeLink(NodeLink* originalNodeLink, PointerLookupDictionary* nodeLookup);
 };

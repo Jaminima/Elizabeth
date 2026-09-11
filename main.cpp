@@ -11,20 +11,24 @@ int main() {
 
     Tree* tree = TreeHelper::createTree(28 * 28, 10);
 
-    Tree* newTree = TreeCloner::cloneTree(tree);
+    Tree** trees = TreeCloner::cloneTrees(tree, 10);
 
     IdxFile* idxFileImages = IdxFileHelper::loadFile("/home/oscar/Downloads/train-images.idx3-ubyte");
     IdxFile* idxFileLabels = IdxFileHelper::loadFile("/home/oscar/Downloads/train-labels.idx1-ubyte");
 
-    for (int i=0;i<10;++i) {
-        char* labelData = IdxFileHelper::getByDimensions(idxFileLabels, 1, new unsigned int[1]{i});
-        char* imageData = IdxFileHelper::getByDimensions(idxFileImages, 1, new unsigned int[1]{i});
-        unsigned int imageCharSize = IdxFileHelper::getCharSizeAtDimension(idxFileImages, 1);
+    for (int imageIdx=0;imageIdx<10;++imageIdx) {
+        for (int treeIdx = 0;treeIdx<10;treeIdx++){
+            char* labelData = IdxFileHelper::getByDimensions(idxFileLabels, 1, new unsigned int[1]{imageIdx});
+            char* imageData = IdxFileHelper::getByDimensions(idxFileImages, 1, new unsigned int[1]{imageIdx});
+            unsigned int imageCharSize = IdxFileHelper::getCharSizeAtDimension(idxFileImages, 1);
 
-        float* normalizedImageData = MNISTNormalizer::normalizeImage(imageData, imageCharSize);
-        float* normalizedLabelData = MNISTNormalizer::normalizeLabels(labelData);
+            float* normalizedImageData = MNISTNormalizer::normalizeImage(imageData, imageCharSize);
+            float* normalizedLabelData = MNISTNormalizer::normalizeLabels(labelData);
 
-        EvaluatedTree* evaluatedTree = TrainingManager::evaluate_tree(newTree, normalizedImageData, normalizedLabelData, i);
+            EvaluatedTree* evaluatedTree = TrainingManager::evaluate_tree(trees[treeIdx], normalizedImageData, normalizedLabelData, imageIdx);
+
+            std::cout << "Tree " << treeIdx << ", Image " << imageIdx << ": " << evaluatedTree->score << std::endl;
+        }
     }
 
     return 0;

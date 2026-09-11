@@ -23,6 +23,14 @@ Tree* TreeCloner::cloneTree(Tree* originalTree) {
     return newTree;
 }
 
+Tree** TreeCloner::cloneTrees(Tree* originalTree, int treeCount) {
+    Tree** newTrees = new Tree*[treeCount];
+    for (int i = 0; i < treeCount; i++) {
+        newTrees[i] = cloneTree(originalTree);
+    }
+    return newTrees;
+}
+
 Node* TreeCloner::cloneNode(Node* originalNode, PointerLookupDictionary* nodeLookup) {
     Node* existingNode = (Node*)nodeLookup->get(originalNode);
     if (existingNode != nullptr) {
