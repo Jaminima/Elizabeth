@@ -6,10 +6,10 @@ Tree* TreeHelper::createTree(int inputNodeCount, int outputNodeCount) {
 
     Node* sourceNode = NodeHelper::createNode();
 
-    NodeLink** inputNodeLinks = NodeHelper::addBackwardNodes(sourceNode, 1);
+    NodeLink** inputNodeLinks = NodeHelper::addBackwardNodes(sourceNode, inputNodeCount);
     Node** inputNodes = NodeHelper::getBackwardNodesFromLinks(inputNodeLinks);
 
-    NodeLink** outputNodeLinks = NodeHelper::addForwardNodes(sourceNode, 1);
+    NodeLink** outputNodeLinks = NodeHelper::addForwardNodes(sourceNode, outputNodeCount);
     Node** outputNodes = NodeHelper::getForwardNodesFromLinks(outputNodeLinks);
 
     tree->inputNodes = inputNodes;

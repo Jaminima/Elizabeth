@@ -15,20 +15,19 @@ void TreeProcessor::processAllNodes(Tree* tree, int epoch_index) {
             NodeLink* forwardNode = node->forward_nodes[i];
             
             if (forwardNode != nullptr)
-                queue = queue->Push(forwardNode->forward);
+                queue->Push(forwardNode->forward);
         }
     }
 
-    while (queue->current != nullptr) {
-        Node* node = queue->current;
+    while (queue->CanPop()) {
+        Node* node = queue->Pop();
         NodeProcessor::processNode(node, epoch_index);
-        queue = queue->Pop();
 
         for (int i = 0; i < node->current_forward; i++) {
             NodeLink* forwardNode = node->forward_nodes[i];
             
             if (forwardNode != nullptr)
-                queue = queue->Push(forwardNode->forward);
+                queue->Push(forwardNode->forward);
         }
 
     }

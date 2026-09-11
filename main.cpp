@@ -5,8 +5,9 @@
 int main() {
     std::cout << "Start" << std::endl;
 
-    Tree* tree = TreeHelper::createTree(1, 1);
+    Tree* tree = TreeHelper::createTree(2, 2);
     tree->inputNodes[0]->activation = 1.0f; 
+    tree->inputNodes[1]->activation = 1.0f; 
 
     TreeProcessor::processAllNodes(tree, 0);
 
