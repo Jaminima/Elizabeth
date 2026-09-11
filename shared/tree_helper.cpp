@@ -50,3 +50,11 @@ void TreeHelper::applyActivationToInputNodes(Tree* tree, float* activations) {
         }
     }
 }
+
+float* TreeHelper::getOutputActivations(Tree* tree) {
+    float* outputActivations = new float[tree->outputNodeCount];
+    for (int i = 0; i < tree->outputNodeCount; ++i) {
+        outputActivations[i] = tree->outputNodes[i]->activation;
+    }
+    return outputActivations;
+}

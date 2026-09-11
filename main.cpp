@@ -3,6 +3,7 @@
 #include "processing/tree_processor.h"
 #include "datasets/idx_file_helper.h"
 #include "processing/mnist_normalizer.h"
+#include "training/training_manager.h"
 
 int main() {
     std::cout << "Start" << std::endl;
@@ -20,9 +21,7 @@ int main() {
         float* normalizedImageData = MNISTNormalizer::normalizeImage(imageData, imageCharSize);
         float* normalizedLabelData = MNISTNormalizer::normalizeLabels(labelData);
 
-        TreeHelper::applyActivationToInputNodes(tree, normalizedImageData);
-
-        TreeProcessor::processAllNodes(tree, i);
+        EvaluatedTree* evaluatedTree = TrainingManager::evaluate_tree(tree, normalizedImageData, normalizedLabelData, i);
     }
 
     return 0;
