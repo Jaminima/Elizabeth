@@ -12,29 +12,14 @@ int main() {
 
     Tree* tree = TreeHelper::createTree(28 * 28, 10);
 
-    Tree** trees = TreeCloner::cloneTrees(tree, 10);
-    for (int i = 0; i < 10; ++i) {
-        TreeMutator::mutate(trees[i], 0.8f, 0.01f);
-    }
-
     IdxFile* idxFileImages = IdxFileHelper::loadFile("/home/oscar/Downloads/train-images.idx3-ubyte");
     IdxFile* idxFileLabels = IdxFileHelper::loadFile("/home/oscar/Downloads/train-labels.idx1-ubyte");
 
-    for (int treeIdx = 0;treeIdx<10;treeIdx++){
-        float treeScore = 0.0f;
-        for (int imageIdx=0;imageIdx<10;++imageIdx) {
-            char* labelData = IdxFileHelper::getByDimensions(idxFileLabels, 1, new unsigned int[1]{imageIdx});
-            char* imageData = IdxFileHelper::getByDimensions(idxFileImages, 1, new unsigned int[1]{imageIdx});
-            unsigned int imageCharSize = IdxFileHelper::getCharSizeAtDimension(idxFileImages, 1);
-
-            float* normalizedImageData = MNISTNormalizer::normalizeImage(imageData, imageCharSize);
-            float* normalizedLabelData = MNISTNormalizer::normalizeLabels(labelData);
-
-            EvaluatedTree* evaluatedTree = TrainingManager::evaluate_tree(trees[treeIdx], normalizedImageData, normalizedLabelData, imageIdx);
-
-            treeScore += evaluatedTree->score;
-        }
-        std::cout << "Tree " << treeIdx << " Total Score: " << treeScore << std::endl;
+    EvaluatedTree* t = nullptr;
+    int epoch_index = 0;
+    while (true) {
+        t = TrainingManager::train_tree(t ? t->baseTree : tree, idxFileImages, idxFileLabels, 10, epoch_index);
+        ++epoch_index;
     }
 
     return 0;
