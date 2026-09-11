@@ -46,3 +46,33 @@ IdxFile* IdxFileHelper::loadFile(const char* filePath) {
 
     return idxFile;
 }
+    
+char* IdxFileHelper::getByDimensions(IdxFile* idxFile, unsigned int dimensions, unsigned int* indices) {
+    if (dimensions > idxFile->dimensions) {
+        return nullptr;
+    }
+
+    unsigned int offset = 0;
+    unsigned int elementSize = getElementSize(idxFile->dataType);
+    for (unsigned int i = 0; i < dimensions; ++i) {
+        unsigned int subDimensionSize = 1;
+        for (unsigned int j = i + 1; j < idxFile->dimensions; ++j) {
+            subDimensionSize *= idxFile->dimensionSizes[j];
+        }
+        offset += indices[i] * subDimensionSize * elementSize;
+    }
+
+    return idxFile->data + offset;
+}
+
+unsigned int IdxFileHelper::getCharSizeAtDimension(IdxFile* idxFile, unsigned int dimensions) {
+    if (dimensions > idxFile->dimensions) {
+        return 0;
+    }
+
+    unsigned int charSize = getElementSize(idxFile->dataType);
+    for (unsigned int i = dimensions; i < idxFile->dimensions; ++i) {
+        charSize *= idxFile->dimensionSizes[i];
+    }
+    return charSize;
+}

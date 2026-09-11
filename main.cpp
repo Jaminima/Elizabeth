@@ -9,9 +9,10 @@ int main() {
     IdxFile* idxFileImages = IdxFileHelper::loadFile("/home/oscar/Downloads/train-images.idx3-ubyte");
     IdxFile* idxFileLabels = IdxFileHelper::loadFile("/home/oscar/Downloads/train-labels.idx1-ubyte");
 
-    Tree* tree = TreeHelper::createTree(2, 2);
-    tree->inputNodes[0]->activation = 1.0f; 
-    tree->inputNodes[1]->activation = 1.0f; 
+    char* imageData = IdxFileHelper::getByDimensions(idxFileImages, 1, new unsigned int[1]{0});
+    unsigned int imageCharSize = IdxFileHelper::getCharSizeAtDimension(idxFileImages, 1);
+
+    Tree* tree = TreeHelper::createTree(28 * 28, 10);
 
     TreeProcessor::processAllNodes(tree, 0);
 
