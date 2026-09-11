@@ -5,6 +5,7 @@
 #include "datasets/idx_file_helper.h"
 #include "processing/mnist_normalizer.h"
 #include "training/training_manager.h"
+#include "mutating/tree_mutator.h"
 
 int main() {
     std::cout << "Start" << std::endl;
@@ -12,12 +13,15 @@ int main() {
     Tree* tree = TreeHelper::createTree(28 * 28, 10);
 
     Tree** trees = TreeCloner::cloneTrees(tree, 10);
+    for (int i = 0; i < 10; ++i) {
+        TreeMutator::mutate(trees[i], 1.8f);
+    }
 
     IdxFile* idxFileImages = IdxFileHelper::loadFile("/home/oscar/Downloads/train-images.idx3-ubyte");
     IdxFile* idxFileLabels = IdxFileHelper::loadFile("/home/oscar/Downloads/train-labels.idx1-ubyte");
 
-    for (int imageIdx=0;imageIdx<10;++imageIdx) {
-        for (int treeIdx = 0;treeIdx<10;treeIdx++){
+    for (int treeIdx = 0;treeIdx<10;treeIdx++){
+        for (int imageIdx=0;imageIdx<10;++imageIdx) {
             char* labelData = IdxFileHelper::getByDimensions(idxFileLabels, 1, new unsigned int[1]{imageIdx});
             char* imageData = IdxFileHelper::getByDimensions(idxFileImages, 1, new unsigned int[1]{imageIdx});
             unsigned int imageCharSize = IdxFileHelper::getCharSizeAtDimension(idxFileImages, 1);

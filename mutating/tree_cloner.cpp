@@ -5,21 +5,23 @@
 Tree* TreeCloner::cloneTree(Tree* originalTree) {
     Tree* newTree = new Tree();
     PointerLookupDictionary* nodeLookup = new PointerLookupDictionary();
+    PointerLookupDictionary* nodeLinkLookup = new PointerLookupDictionary();
 
     newTree->id = Rand::getInt(0, INT_MAX);
 
     newTree->inputNodes = new Node*[originalTree->inputNodeCount];
     for (int i = 0; i < originalTree->inputNodeCount; i++) {
-        newTree->inputNodes[i] = cloneNode(originalTree->inputNodes[i], nodeLookup);
+        newTree->inputNodes[i] = cloneNode(originalTree->inputNodes[i], nodeLookup, nodeLinkLookup);
     }
     newTree->inputNodeCount = originalTree->inputNodeCount;
 
     newTree->outputNodes = new Node*[originalTree->outputNodeCount];
     for (int i = 0; i < originalTree->outputNodeCount; i++) {
-        newTree->outputNodes[i] = cloneNode(originalTree->outputNodes[i], nodeLookup);
+        newTree->outputNodes[i] = cloneNode(originalTree->outputNodes[i], nodeLookup, nodeLinkLookup);
     }
     newTree->outputNodeCount = originalTree->outputNodeCount;
 
+    newTree->nodeLookup = nodeLookup;
     return newTree;
 }
 
@@ -31,7 +33,7 @@ Tree** TreeCloner::cloneTrees(Tree* originalTree, int treeCount) {
     return newTrees;
 }
 
-Node* TreeCloner::cloneNode(Node* originalNode, PointerLookupDictionary* nodeLookup) {
+Node* TreeCloner::cloneNode(Node* originalNode, PointerLookupDictionary* nodeLookup, PointerLookupDictionary* nodeLinkLookup) {
     Node* existingNode = (Node*)nodeLookup->get(originalNode);
     if (existingNode != nullptr) {
         return existingNode;
@@ -49,16 +51,21 @@ Node* TreeCloner::cloneNode(Node* originalNode, PointerLookupDictionary* nodeLoo
     nodeLookup->add(originalNode, newNode);
 
     for (int i = 0; i < newNode->current_forward; i++) {
-        newNode->forward_nodes[i] = cloneNodeLink(originalNode->forward_nodes[i], nodeLookup);
+        newNode->forward_nodes[i] = cloneNodeLink(originalNode->forward_nodes[i], nodeLookup, nodeLinkLookup);
     }
     for (int i = 0; i < newNode->current_backward; i++) {
-        newNode->backward_nodes[i] = cloneNodeLink(originalNode->backward_nodes[i], nodeLookup);
+        newNode->backward_nodes[i] = cloneNodeLink(originalNode->backward_nodes[i], nodeLookup, nodeLinkLookup);
     }
 
     return newNode;
 }
 
-NodeLink* TreeCloner::cloneNodeLink(NodeLink* originalNodeLink, PointerLookupDictionary* nodeLookup) {
+NodeLink* TreeCloner::cloneNodeLink(NodeLink* originalNodeLink, PointerLookupDictionary* nodeLookup, PointerLookupDictionary* nodeLinkLookup) {
+    NodeLink* existingNodeLink = (NodeLink*)nodeLinkLookup->get(originalNodeLink);
+    if (existingNodeLink != nullptr) {
+        return existingNodeLink;
+    }
+    
     NodeLink* newNodeLink = new NodeLink();
 
     newNodeLink->min_cut_off = originalNodeLink->min_cut_off;
@@ -66,8 +73,10 @@ NodeLink* TreeCloner::cloneNodeLink(NodeLink* originalNodeLink, PointerLookupDic
     newNodeLink->weight = originalNodeLink->weight;
     newNodeLink->offset = originalNodeLink->offset;
 
-    newNodeLink->forward = cloneNode(originalNodeLink->forward, nodeLookup);
-    newNodeLink->backward = cloneNode(originalNodeLink->backward, nodeLookup);
+    newNodeLink->forward = cloneNode(originalNodeLink->forward, nodeLookup, nodeLinkLookup);
+    newNodeLink->backward = cloneNode(originalNodeLink->backward, nodeLookup, nodeLinkLookup);
+    
+    nodeLinkLookup->add(originalNodeLink, newNodeLink);
 
     return newNodeLink;
 }

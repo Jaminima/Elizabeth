@@ -21,8 +21,8 @@ NodeLink* NodeHelper::createNodeLink() {
     NodeLink* link = new NodeLink();
     link->forward = nullptr;
     link->backward = nullptr;
-    link->weight = 0.1f;
-    link->offset = 0.0f;
+    link->weight = 0.5f;
+    link->offset = 0.5f;
     link->max_cut_off = 1.0f;
     link->min_cut_off = 0.0f;
     return link;
