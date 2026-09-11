@@ -9,7 +9,7 @@
 EvaluatedTree* TrainingManager::train_tree(Tree* tree, IdxFile* idxFileImages, IdxFile* idxFileLabels, int batch_size, int epoch_index) {
     Tree** trees = TreeCloner::cloneTrees(tree, batch_size);
     for (int i = 0; i < batch_size; ++i) {
-        TreeMutator::mutate(trees[i], 0.8f, 0.01f);
+        TreeMutator::mutate(trees[i], 0.4f, 0.01f);
     }
 
     EvaluatedTree** evaluatedTrees = new EvaluatedTree*[batch_size];
@@ -18,7 +18,7 @@ EvaluatedTree* TrainingManager::train_tree(Tree* tree, IdxFile* idxFileImages, I
         evaluatedTrees[treeIdx] = new EvaluatedTree();
         evaluatedTrees[treeIdx]->baseTree = trees[treeIdx];
         float treeScore = 0.0f;
-        for (int imageIdx=0;imageIdx<10;++imageIdx) {
+        for (int imageIdx=0;imageIdx<500;++imageIdx) {
             char* labelData = IdxFileHelper::getByDimensions(idxFileLabels, 1, new unsigned int[1]{imageIdx});
             char* imageData = IdxFileHelper::getByDimensions(idxFileImages, 1, new unsigned int[1]{imageIdx});
             unsigned int imageCharSize = IdxFileHelper::getCharSizeAtDimension(idxFileImages, 1);
@@ -29,6 +29,10 @@ EvaluatedTree* TrainingManager::train_tree(Tree* tree, IdxFile* idxFileImages, I
             EvaluatedTree* evaluatedTree = TrainingManager::evaluate_tree(trees[treeIdx], normalizedImageData, normalizedLabelData, imageIdx);
 
             treeScore += evaluatedTree->score;
+
+            delete[] normalizedImageData;
+            delete[] normalizedLabelData;
+            delete evaluatedTree;
         }
         evaluatedTrees[treeIdx]->score = treeScore;
         std::cout << "Tree " << treeIdx << " Total Score: " << treeScore << std::endl;
