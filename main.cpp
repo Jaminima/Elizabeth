@@ -1,20 +1,14 @@
 #include <iostream>
-#include "shared/types/node.h"
-#include "shared/node_helper.h"
-#include "processing/node_processor.h"
+#include "shared/tree_helper.h"
+#include "processing/tree_processor.h"
 
 int main() {
     std::cout << "Start" << std::endl;
 
-    Node* sourceNode = NodeHelper::createNode();
+    Tree* tree = TreeHelper::createTree(1, 1);
+    tree->inputNodes[0]->activation = 1.0f; 
 
-    NodeLink** inputNodeLinks = NodeHelper::addBackwardNodes(sourceNode, 1);
-    Node** inputNodes = NodeHelper::getBackwardNodesFromLinks(inputNodeLinks);
-    inputNodes[0]->activation = 1.0f;
-
-    NodeLink** outputNodeLinks = NodeHelper::addForwardNodes(sourceNode, 1);
-
-    NodeProcessor::processAllNodes(inputNodes, 1, 0);
+    TreeProcessor::processAllNodes(tree, 0);
 
     return 0;
 }

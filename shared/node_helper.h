@@ -14,6 +14,7 @@ class NodeHelper {
     static NodeLink* addForwardNode(Node* node);
     static NodeLink** addBackwardNodes(Node* node, int count);
     static NodeLink** addForwardNodes(Node* node, int count);
+    static NodeLink** addNodeBetweenNodes(Node* backward_node, Node* forward_node);
 };
 
 #endif // NODE_HELPER_H

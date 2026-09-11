@@ -5,7 +5,6 @@
 
 class NodeProcessor {
     public:
-    static void processAllNodes(Node** inputNodes, int count, int epoch_index);
     static void processNode(Node* node, int epoch_index);
 };
 

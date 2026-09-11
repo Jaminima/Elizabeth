@@ -106,3 +106,7 @@ NodeLink** NodeHelper::addForwardNodes(Node* node, int count) {
     }
     return links;
 }
+
+NodeLink** NodeHelper::addNodeBetweenNodes(Node* backward_node, Node* forward_node) {
+    
+}
