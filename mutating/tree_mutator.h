@@ -4,7 +4,7 @@
 
 class TreeMutator {
 public:
-    static void mutate(Tree* tree, float mutationRate);
+    static void mutate(Tree* tree, float mutationRate, float reactionRate);
 };
 
 #endif // TREE_MUTATOR_H

@@ -102,6 +102,10 @@ NodeLink* NodeHelper::addForwardNode(Node* node) {
     return link;
 }
 
+bool NodeHelper::canAddLinkToNodes(Node* backward_node, Node* forward_node) {
+    return backward_node->current_forward < NODE_LINKS_SIZE && forward_node->current_backward < NODE_LINKS_SIZE;
+}
+
 NodeLink* NodeHelper::linkNodes(Node* backward_node, Node* forward_node) {
     NodeLink* link = createNodeLink();
     link->backward = backward_node;

@@ -4,7 +4,6 @@
 
 EvaluatedTree* TrainingManager::evaluate_tree(Tree* tree, float* inputs, float* expectedOutputs, int epoch_index) {
     EvaluatedTree* evaluatedTree = new EvaluatedTree();
-    evaluatedTree->baseTree = tree;
     evaluatedTree->score = 0.0f;
 
     TreeHelper::applyActivationToInputNodes(tree, inputs);

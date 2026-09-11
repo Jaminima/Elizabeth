@@ -13,6 +13,7 @@ class NodeHelper {
     static Node** getForwardNodesFromLinks(NodeLink** node_links);
     static bool canAddBackwardNode(Node* node);
     static bool canAddForwardNode(Node* node);
+    static bool canAddLinkToNodes(Node* backward_node, Node* forward_node);
     static NodeLink* addBackwardNode(Node* node);
     static NodeLink* addForwardNode(Node* node);
     static NodeLink* linkNodes(Node* backward_node, Node* forward_node);
