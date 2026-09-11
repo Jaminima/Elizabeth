@@ -10,8 +10,8 @@ struct Node {
     int current_forward;
     int current_backward;
     int node_layer;
-    NodeLink* forward_nodes[NODE_LINKS_FORWARD_SIZE];
-    NodeLink* backward_nodes[NODE_LINKS_BACKWARD_SIZE];
+    NodeLink* forward_nodes[NODE_LINKS_SIZE];
+    NodeLink* backward_nodes[NODE_LINKS_SIZE];
 };
 
 #endif // NODE_H

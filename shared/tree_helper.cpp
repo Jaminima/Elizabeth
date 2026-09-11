@@ -1,16 +1,38 @@
 #include "tree_helper.h"
 #include "node_helper.h"
+#include "consts.h"
+#include "rand.h"
 
 Tree* TreeHelper::createTree(int inputNodeCount, int outputNodeCount) {
     Tree* tree = new Tree();
 
-    Node* sourceNode = NodeHelper::createNode();
+    int middleNodeCount = (inputNodeCount + outputNodeCount) / 2;
+    int maxMiddleNodesForward = NODE_LINKS_SIZE * outputNodeCount;
+    int maxMiddleNodesBackward = NODE_LINKS_SIZE * inputNodeCount;
+    int maxMiddleNodes = (maxMiddleNodesForward < maxMiddleNodesBackward) ? maxMiddleNodesForward : maxMiddleNodesBackward;
+    if (middleNodeCount > maxMiddleNodes) {
+        middleNodeCount = maxMiddleNodes;
+    }
 
-    NodeLink** inputNodeLinks = NodeHelper::addBackwardNodes(sourceNode, inputNodeCount);
-    Node** inputNodes = NodeHelper::getBackwardNodesFromLinks(inputNodeLinks);
+    Node** inputNodes = NodeHelper::createMultipleNodes(inputNodeCount);
+    Node** middleNodes = NodeHelper::createMultipleNodes(middleNodeCount);
+    Node** outputNodes = NodeHelper::createMultipleNodes(outputNodeCount);
 
-    NodeLink** outputNodeLinks = NodeHelper::addForwardNodes(sourceNode, outputNodeCount);
-    Node** outputNodes = NodeHelper::getForwardNodesFromLinks(outputNodeLinks);
+    for (int i = 0; i < middleNodeCount; i++) {
+        Node* middleNode = middleNodes[i];
+
+        for (int j = 0; j < NODE_LINKS_SIZE; j++){
+            int forwardLink = Rand::getInt(0, inputNodeCount - 1);
+            int backwardLink = Rand::getInt(0, outputNodeCount - 1);
+
+            if (!NodeHelper::canAddForwardNode(inputNodes[forwardLink]) || !NodeHelper::canAddBackwardNode(outputNodes[backwardLink])) {
+                continue;
+            }
+
+            NodeHelper::linkNodes(inputNodes[forwardLink], middleNode);
+            NodeHelper::linkNodes(middleNode, outputNodes[backwardLink]);
+        }
+    }
 
     tree->inputNodes = inputNodes;
     tree->outputNodes = outputNodes;

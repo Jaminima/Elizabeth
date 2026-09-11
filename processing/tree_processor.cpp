@@ -11,8 +11,8 @@ void TreeProcessor::processAllNodes(Tree* tree, int epoch_index) {
         Node* node = inputNodes[i];
         node->previous_activation_epoch_index = epoch_index;
 
-        for (int i = 0; i < node->current_forward; i++) {
-            NodeLink* forwardNode = node->forward_nodes[i];
+        for (int j = 0; j < node->current_forward; j++) {
+            NodeLink* forwardNode = node->forward_nodes[j];
             
             if (forwardNode != nullptr)
                 queue->Push(forwardNode->forward);

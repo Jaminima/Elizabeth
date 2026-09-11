@@ -9,11 +9,22 @@ Node* NodeHelper::createNode() {
     return node;
 }
 
+Node** NodeHelper::createMultipleNodes(int count) {
+    Node** nodes = new Node*[count];
+    for (int i = 0; i < count; i++) {
+        nodes[i] = createNode();
+    }
+    return nodes;
+}
+
 NodeLink* NodeHelper::createNodeLink() {
     NodeLink* link = new NodeLink();
     link->forward = nullptr;
     link->backward = nullptr;
-    link->weight = 0.8f;
+    link->weight = 0.1f;
+    link->offset = 0.0f;
+    link->max_cut_off = 1.0f;
+    link->min_cut_off = 0.0f;
     return link;
 }
 
@@ -43,8 +54,16 @@ Node** NodeHelper::getForwardNodesFromLinks(NodeLink** node_links) {
     return nodes;
 }
 
+bool NodeHelper::canAddBackwardNode(Node* node) {
+    return node->current_backward < NODE_LINKS_SIZE;
+}
+
+bool NodeHelper::canAddForwardNode(Node* node) {
+    return node->current_forward < NODE_LINKS_SIZE;
+}
+
 NodeLink* NodeHelper::addBackwardNode(Node* node) {
-    if (node->current_backward >= NODE_LINKS_BACKWARD_SIZE) {
+    if (node->current_backward >= NODE_LINKS_SIZE) {
         return nullptr;
     }
 
@@ -64,7 +83,7 @@ NodeLink* NodeHelper::addBackwardNode(Node* node) {
 }
 
 NodeLink* NodeHelper::addForwardNode(Node* node) {
-    if (node->current_forward >= NODE_LINKS_FORWARD_SIZE) {
+    if (node->current_forward >= NODE_LINKS_SIZE) {
         return nullptr;
     }
 
@@ -79,6 +98,20 @@ NodeLink* NodeHelper::addForwardNode(Node* node) {
 
     node->forward_nodes[node->current_forward] = link;
     node->current_forward++;
+
+    return link;
+}
+
+NodeLink* NodeHelper::linkNodes(Node* backward_node, Node* forward_node) {
+    NodeLink* link = createNodeLink();
+    link->backward = backward_node;
+    link->forward = forward_node;
+
+    backward_node->forward_nodes[backward_node->current_forward] = link;
+    backward_node->current_forward++;
+
+    forward_node->backward_nodes[forward_node->current_backward] = link;
+    forward_node->current_backward++;
 
     return link;
 }
