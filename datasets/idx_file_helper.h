@@ -4,6 +4,7 @@
 
 class IdxFileHelper {
     public:
+    static unsigned int getElementSize(IdxFileDataType dataType);
     static IdxFile* loadFile(const char* filePath);
 };
 
