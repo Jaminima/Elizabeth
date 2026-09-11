@@ -2,9 +2,11 @@
 #include "node_helper.h"
 #include "consts.h"
 #include "rand.h"
+#include <climits>
 
 Tree* TreeHelper::createTree(int inputNodeCount, int outputNodeCount) {
     Tree* tree = new Tree();
+    tree->id = Rand::getInt(0, INT_MAX);
 
     int middleNodeCount = (inputNodeCount + outputNodeCount) / 2;
     int maxMiddleNodesForward = NODE_LINKS_SIZE * outputNodeCount;

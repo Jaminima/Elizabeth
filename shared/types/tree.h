@@ -3,6 +3,7 @@
 #include "node.h"
 
 struct Tree {
+    int id;
     int inputNodeCount;
     int outputNodeCount;
     Node** inputNodes;
