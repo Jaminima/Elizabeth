@@ -19,3 +19,12 @@ Tree* TreeHelper::createTree(int inputNodeCount, int outputNodeCount) {
 
     return tree;
 }
+
+void TreeHelper::applyActivationToInputNodes(Tree* tree, float* activations) {
+    for (int i = 0; i < tree->inputNodeCount; ++i) {
+        if (activations[i] > 0.0f)
+        {
+            tree->inputNodes[i]->activation = activations[i];
+        }
+    }
+}

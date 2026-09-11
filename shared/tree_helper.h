@@ -6,6 +6,7 @@
 class TreeHelper {
     public:
     static Tree* createTree(int inputNodeCount, int outputNodeCount);
+    static void applyActivationToInputNodes(Tree* tree, float* activations);
 };
 
 #endif // TREE_HELPER_H
