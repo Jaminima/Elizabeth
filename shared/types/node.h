@@ -6,6 +6,9 @@
 struct Node {
     float activation;
     float previous_activation;
+    int previous_activation_epoch_index;
+    int current_forward;
+    int current_backward;
     NodeLink* forward_nodes[NODE_LINKS_FORWARD_SIZE];
     NodeLink* backward_nodes[NODE_LINKS_BACKWARD_SIZE];
 };

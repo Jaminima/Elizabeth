@@ -2,10 +2,12 @@
 #define NODE_LINK_H
 
 #include "../consts.h"
-#include "node.h"
+
+struct Node;
 
 struct NodeLink {
-    Node* target;
+    Node* forward;
+    Node* backward;
     float min_cut_off;
     float max_cut_off;
     float weight;
